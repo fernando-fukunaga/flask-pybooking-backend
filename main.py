@@ -1,16 +1,26 @@
-# This is a sample Python script.
+from flask import Flask
+from flask_restful import Resource, Api, reqparse
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = Flask(__name__)
+api = Api(app)
+
+table_hotels = {}
+
+parser = reqparse.RequestParser()
+parser.add_argument("hotel_name", type=str)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+class Hotels(Resource):
+
+    def post(self):
+        args = parser.parse_args()
+        table_hotels['1'] = {"name": args["hotel_name"]}
+
+    def get(self):
+        return table_hotels
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+api.add_resource(Hotels, "/hotels")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    app.run(debug=True)
