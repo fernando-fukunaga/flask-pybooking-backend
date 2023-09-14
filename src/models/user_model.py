@@ -1,7 +1,7 @@
 class User:
+    _id: int
     
-    def __init__(self, id: int, name: str, email: str, password: str) -> None:
-        self._id = id
+    def __init__(self, name: str, email: str, password: str) -> None:
         self._name = name
         self._email = email
         self._password = password
@@ -32,3 +32,12 @@ class User:
     def email(self, new_email: str):
         if new_email:
             self._email = new_email
+
+    @property
+    def password(self):
+        return self._password
+    
+    @password.setter
+    def password(self, new_password: str):
+        if new_password:
+            self._password = new_password
