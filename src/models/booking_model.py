@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-class Reservation:
+class Booking:
 
     def __init__(self,
                  id: int,

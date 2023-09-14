@@ -18,7 +18,7 @@ create table hotels(
     additional_info varchar(100) null
 );
 
-create table reservations(
+create table bookings(
 	id int primary key auto_increment,
     id_user int not null,
     id_hotel int not null,
@@ -26,6 +26,6 @@ create table reservations(
     check_out datetime not null,
     num_of_adults int check (num_of_adults >= 1) not null,
     num_of_children int check (num_of_children >= 0) not null,
-    constraint fk_reservations_id_user foreign key (id_user) references users(id),
-    constraint fk_reservations_id_hotel foreign key (id_hotel) references hotels(id)
+    constraint fk_bookings_id_user foreign key (id_user) references users(id),
+    constraint fk_bookings_id_hotel foreign key (id_hotel) references hotels(id)
 );
