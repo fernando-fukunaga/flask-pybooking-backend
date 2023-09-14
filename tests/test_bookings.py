@@ -1,4 +1,4 @@
-from src.main import app
+from main import app
 
 client = app.test_client()
 booking_schema = {}
