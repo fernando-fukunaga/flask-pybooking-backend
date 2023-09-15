@@ -10,5 +10,3 @@ connection_string = (
 )
 
 connection = pyodbc.connect(connection_string)
-
-cursor = connection.cursor()
