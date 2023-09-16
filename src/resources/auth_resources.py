@@ -22,3 +22,11 @@ class AuthSignIn(Resource):
         response_model = user_schemas.SucessfulSignIn()
         response = response_model.dump(repository.authenticate_user(payload))
         return response, 200
+    
+
+class AuthMe(Resource):
+
+    def get(self):
+        response_model = user_schemas.UserNoPassword()
+        response = response_model.dump(repository.get_user_by_email())
+        return response, 200

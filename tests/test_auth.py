@@ -1,4 +1,5 @@
 from main import app
+from tests.random_number_generator import generate_number
 
 client = app.test_client()
 
@@ -7,8 +8,8 @@ class TestUsers:
 
     def test_sign_up_user_correctly_returns_201(self):
         response = client.post("/auth/signup", json={
-            "name": "fernando",
-            "email": "fernando@gmail.com",
+            "name": "Test Dummy",
+            "email": f"test{generate_number()}@email.com",
             "password": "senha"
         })
 

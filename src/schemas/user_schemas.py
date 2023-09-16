@@ -18,5 +18,5 @@ class SignIn(Schema):
 
 class SucessfulSignIn(Schema):
     message = fields.Str(default="Sucessfully logged in!")
-    access_token = fields.Str(default="fake_token")
+    access_token = fields.Str(default="Bearer fake_token")
     email = fields.Str()
