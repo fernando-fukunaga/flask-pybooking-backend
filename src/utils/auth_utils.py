@@ -1,8 +1,6 @@
-from src.utils.current_user import current_user
+from jose import jwt
 
+token = jwt.encode({'key': 'value'}, 'secret', algorithm='HS256')
 
-def token_is_valid(token: str) -> bool:
-    if token == current_user.token:
-        return True
-    else:
-        return False
+jwt.decode(token, 'secret', algorithms=['HS256'])
+{u'key': u'value'}
