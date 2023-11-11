@@ -1,6 +1,12 @@
-from jose import jwt
+from pyodbc import Connection
+from src.providers.token_provider import jwt_decode
+from jose import JWTError
 
-token = jwt.encode({'key': 'value'}, 'secret', algorithm='HS256')
 
-jwt.decode(token, 'secret', algorithms=['HS256'])
-{u'key': u'value'}
+def get_logged_in_user(token: str, connection: Connection) -> str:
+    cursor = connection.cursor()
+
+    try:
+        jwt_decode(token)
+    except JWTError as e:
+        raise e

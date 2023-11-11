@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask import request
-from werkzeug.exceptions import Unauthorized
+from src.errors import errors
 from src.repositories.user_repository import UserRepository
 from src.schemas import user_schemas
 from src.utils.current_user import current_user
@@ -37,4 +37,4 @@ class AuthMe(Resource):
             response = response_model.dump(repository.get_user_by_email(current_user.email))
             return response, 200
         else:
-            raise Unauthorized(description="Invalid bearer token!")
+            raise errors.error_401("Invalid bearer token!")

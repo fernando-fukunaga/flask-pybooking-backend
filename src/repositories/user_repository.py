@@ -1,6 +1,6 @@
 from src.database.database_connector import connection
 from src.models.user_model import User
-from werkzeug.exceptions import InternalServerError, BadRequest
+from src.errors import errors
 from src.utils.current_user import current_user
 
 
@@ -19,17 +19,17 @@ class UserRepository:
                 return False
             
         except Exception:
-            raise InternalServerError(
-                description="An internal connection error has occured!"
+            raise errors.error_500(
+                "An internal connection error has occured!"
             )
 
     def insert_user(self, payload: dict) -> User:
         if self._email_already_registered(payload["email"]):
-            raise BadRequest(description="E-mail already registered!")
+            raise errors.error_400("E-mail already registered!")
         
         if len(payload["password"]) > 14:
-            raise BadRequest(
-                description="Password can't be longer than 14 characters!"
+            raise errors.error_400(
+                "Password can't be longer than 14 characters!"
             )
         
         cursor = connection.cursor()
@@ -47,8 +47,8 @@ class UserRepository:
             connection.commit()
 
         except Exception:
-            raise InternalServerError(
-                description="An internal connection error has occured!"
+            raise errors.error_500(
+                "An internal connection error has occured!"
             )
         
         return new_user
@@ -63,8 +63,8 @@ class UserRepository:
             )
             
         except Exception:
-            raise InternalServerError(
-                description="An internal connection error has occured!"
+            raise errors.error_500(
+                "An internal connection error has occured!"
             )
         
         query_result = cursor.fetchone()
@@ -75,8 +75,8 @@ class UserRepository:
             current_user.token = "fake_token"
             return user
         else:
-            raise BadRequest(
-                description="Wrong e-mail or password, try again!"
+            raise errors.error_400(
+                "Wrong e-mail or password, try again!"
             )
 
     def get_user_by_email(self, email: str) -> User:
@@ -88,8 +88,8 @@ class UserRepository:
             )
 
         except Exception:
-            raise InternalServerError(
-                description="An internal connection error has occured!"
+            raise errors.error_500(
+                "An internal connection error has occured!"
             )
         
         query_result = cursor.fetchone()
@@ -98,7 +98,4 @@ class UserRepository:
             user = User(query_result[1], query_result[2], query_result[3])
             return user
         else:
-            raise BadRequest(
-                description="User not found!"
-            )
-        
+            raise errors.error_404("User not found!")
