@@ -28,10 +28,10 @@ class TestBookings:
 
         assert response.status_code == 401
 
-    def test_booking_hotel_with_no_token_returns_401(self):
+    def test_booking_hotel_with_no_token_returns_400(self):
         response = client.post("/bookings", json=booking_schema)
 
-        assert response.status_code == 401
+        assert response.status_code == 400
 
     def test_listing_bookings_correctly_and_authenticated_returns_200_when_the_current_user_has_at_least_one_booking(self):
         response = client.get("/bookings", headers=headers)
@@ -48,10 +48,10 @@ class TestBookings:
 
         assert response.status_code == 401
 
-    def test_listing_bookings_with_no_token_returns_401(self):
+    def test_listing_bookings_with_no_token_returns_400(self):
         response = client.get("/bookings")
 
-        assert response.status_code == 401
+        assert response.status_code == 400
 
     def test_updating_existing_bookings_correctly_and_authenticated_returns_200(self):
         response = client.post("/bookings/1", json=booking_schema,
@@ -71,10 +71,10 @@ class TestBookings:
 
         assert response.status_code == 401
 
-    def test_updating_bookings_with_no_token_returns_401(self):
+    def test_updating_bookings_with_no_token_returns_400(self):
         response = client.post("/bookings/1", json=booking_schema)
 
-        assert response.status_code == 401
+        assert response.status_code == 400
 
     def test_canceling_existing_bookings_correctly_and_authenticated_returns_204(self):
         response = client.delete("/bookings/1", headers=headers)
@@ -91,7 +91,7 @@ class TestBookings:
 
         assert response.status_code == 401
 
-    def test_canceling_bookings_with_no_token_returns_401(self):
+    def test_canceling_bookings_with_no_token_returns_400(self):
         response = client.delete("/bookings/1")
 
-        assert response.status_code == 401
+        assert response.status_code == 400

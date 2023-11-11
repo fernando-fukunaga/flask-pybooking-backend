@@ -1,6 +1,8 @@
 from main import app
 from tests.random_number_generator import generate_number
 
+HEADERS = {"Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZlcm5hbmRvQGVtYWlsLmNvbSJ9.nwtvMlvlMpTP4NkO2TZoNa8utvBJMiE5l88D6xxE4UA"}
+
 client = app.test_client()
 
 
@@ -58,9 +60,7 @@ class TestUsers:
         assert response.status_code == 400
 
     def test_me_route_returns_200_when_a_valid_token_is_passed_in_headers(self):
-        response = client.get("/auth/me", headers={
-            "Authorization": ""
-        })
+        response = client.get("/auth/me", headers=HEADERS)
 
         assert response.status_code == 200
 
@@ -71,7 +71,7 @@ class TestUsers:
 
         assert response.status_code == 401
 
-    def test_me_route_returns_401_when_no_token_is_passed_in_headers(self):
+    def test_me_route_returns_400_when_no_token_is_passed_in_headers(self):
         response = client.get("/auth/me")
 
-        assert response.status_code == 401
+        assert response.status_code == 400

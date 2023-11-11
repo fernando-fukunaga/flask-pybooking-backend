@@ -23,10 +23,10 @@ class TestHotels:
 
         assert response.status_code == 401
 
-    def test_listing_hotels_with_no_token_returns_401(self):
+    def test_listing_hotels_with_no_token_returns_400(self):
         response = client.get("/hotels")
 
-        assert response.status_code == 401
+        assert response.status_code == 400
 
     def test_searching_hotels_by_an_existing_name_correctly_and_authenticated_returns_200(self):
         response = client.get("/hotels?name=ibis%20hotel%20santos", headers=headers)
@@ -53,7 +53,7 @@ class TestHotels:
 
         assert response.status_code == 401
 
-    def test_searching_hotels_with_no_token_returns_401(self):
+    def test_searching_hotels_with_no_token_returns_400(self):
         response = client.get("/hotels?name=ibis%20hotel%20santos")
 
-        assert response.status_code == 401
+        assert response.status_code == 400

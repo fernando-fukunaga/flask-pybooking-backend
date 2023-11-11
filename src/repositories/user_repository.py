@@ -1,7 +1,8 @@
 from src.database.database_connector import connection
 from src.models.user_model import User
+from src.providers.token_provider import jwt_encode
+from src.schemas.user_schemas import SucessfulSignIn
 from src.errors import errors
-from src.utils.current_user import current_user
 
 
 class UserRepository:
@@ -53,7 +54,7 @@ class UserRepository:
         
         return new_user
 
-    def authenticate_user(self, payload: dict) -> User:
+    def sign_in_user(self, payload: dict) -> SucessfulSignIn:
         cursor = connection.cursor()
         try:
             cursor.execute(
@@ -66,20 +67,22 @@ class UserRepository:
             raise errors.error_500(
                 "An internal connection error has occured!"
             )
-        
-        query_result = cursor.fetchone()
 
-        if query_result:
-            user = User("", payload["email"], "")
-            current_user.email = payload["email"]
-            current_user.token = "fake_token"
-            return user
+        if cursor.fetchone():
+            jwt_payload = {"email":payload["email"]}
+            token = jwt_encode(jwt_payload)
+            schema = SucessfulSignIn()
+            schema.email = payload["email"]
+            schema.access_token = token
+            response = schema.dump(schema)
+            return response
         else:
             raise errors.error_400(
                 "Wrong e-mail or password, try again!"
             )
 
-    def get_user_by_email(self, email: str) -> User:
+    @staticmethod
+    def get_user_by_email(email: str) -> User:
         cursor = connection.cursor()
         try:
             cursor.execute(

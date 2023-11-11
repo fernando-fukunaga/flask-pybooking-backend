@@ -1,13 +1,10 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from flask import request
-from src.errors import errors
 from src.repositories.user_repository import UserRepository
 from src.schemas import user_schemas
-from src.utils.current_user import current_user
-from src.utils.auth_utils import token_is_valid
+from src.utils.auth_utils import get_logged_in_user, verify_headers_and_retrieve_token
 
 repository = UserRepository()
-parser = reqparse.RequestParser()
 
 
 class AuthSignUp(Resource):
@@ -23,8 +20,7 @@ class AuthSignIn(Resource):
 
     def post(self):
         payload = user_schemas.SignIn().load(request.json)
-        response_model = user_schemas.SucessfulSignIn()
-        response = response_model.dump(repository.authenticate_user(payload))
+        response = repository.sign_in_user(payload)
         return response, 200
     
 
@@ -32,9 +28,6 @@ class AuthMe(Resource):
 
     def get(self):
         response_model = user_schemas.UserNoPassword()
-        token = parser.add_argument('Authorization', location='headers')
-        if token_is_valid(token):
-            response = response_model.dump(repository.get_user_by_email(current_user.email))
-            return response, 200
-        else:
-            raise errors.error_401("Invalid bearer token!")
+        token = verify_headers_and_retrieve_token(request)
+        response = response_model.dump(get_logged_in_user(token))
+        return response, 200
