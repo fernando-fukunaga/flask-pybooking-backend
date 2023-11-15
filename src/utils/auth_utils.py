@@ -1,7 +1,7 @@
 from src.providers.token_provider import jwt_decode
 from src.models.user_model import User
 from src.errors import errors
-from src.repositories.user_repository import UserRepository
+from src.repositories.user_repository import select_user_by_email
 from jose import JWTError
 from flask import request
 
@@ -15,7 +15,7 @@ def get_logged_in_user(token: str) -> User:
     if not email:
         raise errors.error_401("Invalid or expired token!")
     
-    usuario = UserRepository.get_user_by_email(email)
+    usuario = select_user_by_email(email)
     if not usuario:
         raise errors.error_401("Invalid or expired token!")
     

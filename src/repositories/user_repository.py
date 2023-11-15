@@ -1,11 +1,66 @@
 from src.database.database_connector import connection
 from src.models.user_model import User
-from src.providers.token_provider import jwt_encode
-from src.schemas.user_schemas import SucessfulSignIn
 from src.errors import errors
 
 
-class UserRepository:
+def insert_user(user: User) -> User:
+    cursor = connection.cursor()
+    try:
+        cursor.execute(
+            "insert into users(name,email,password) values(?,?,?)",
+            user.name,
+            user.email,
+            user.password
+        )
+        connection.commit()
+
+    except Exception:
+        raise errors.error_500("An internal connection error has occured!")
+    
+    return user
+
+
+def select_user_by_email(email: str) -> User:
+    cursor = connection.cursor()
+    try:
+        cursor.execute(
+            "select * from users where email=?",
+            email
+        )
+        
+    except Exception:
+        raise errors.error_500("An internal connection error has occured!")
+
+    query_result = cursor.fetchone()
+
+    if query_result:
+        user = User(query_result[1], query_result[2], query_result[3])
+        return user
+    else:
+        return None
+    
+
+def select_user_by_email_and_password(email: str, password: str) -> User:
+    cursor = connection.cursor()
+    try:
+        cursor.execute(
+            "select * from users where email=? and password=?",
+            email,
+            password
+        )
+
+    except Exception:
+        raise errors.error_500("An internal connection error has occured!")
+    
+    query_result = cursor.fetchone()
+
+    if query_result:
+        user = User(query_result[1], query_result[2], query_result[3])
+        return user
+    else:
+        return None 
+
+'''class UserRepository:
 
     def _email_already_registered(self, email: str) -> bool:
         cursor = connection.cursor()
@@ -102,3 +157,4 @@ class UserRepository:
             return user
         else:
             raise errors.error_404("User not found!")
+'''
