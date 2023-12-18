@@ -7,7 +7,7 @@ connection_string = (
     'DATABASE=pybooking;'
     'UID={1};'
 #    'PWD={2};'
-    'charset=utf8mb4;'.format(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD)
-)
+    'charset=utf8mb4;'
+).format(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD)
 
 connection = pyodbc.connect(connection_string)
