@@ -7,15 +7,15 @@ def insert_user(user: User) -> User:
     cursor = connection.cursor()
     try:
         cursor.execute(
-            "insert into users(name,email,password) values(?,?,?)",
-            user.name,
-            user.email,
-            user.password
+            "insert into users(name,email,password) values(%s,%s,%s)",
+            (user.name,
+             user.email,
+             user.password)
         )
         connection.commit()
 
     except Exception:
-        raise errors.error_500("An internal connection error has occured!")
+        raise errors.error_500("An internal connection error has occurred!")
     
     return user
 
@@ -24,12 +24,12 @@ def select_user_by_email(email: str) -> User:
     cursor = connection.cursor()
     try:
         cursor.execute(
-            "select * from users where email=?",
-            email
+            "select * from users where email=%s",
+            [email]
         )
         
     except Exception:
-        raise errors.error_500("An internal connection error has occured!")
+        raise errors.error_500("An internal connection error has occurred!")
 
     query_result = cursor.fetchone()
 
@@ -50,7 +50,7 @@ def select_user_by_email_and_password(email: str, password: str) -> User:
         )
 
     except Exception:
-        raise errors.error_500("An internal connection error has occured!")
+        raise errors.error_500("An internal connection error has occurred!")
     
     query_result = cursor.fetchone()
 

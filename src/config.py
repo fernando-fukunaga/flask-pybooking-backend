@@ -1,6 +1,9 @@
 import os
+from dotenv import load_dotenv
 
-JWT_SECRET_KEY = os.getenv("jwt_secret_key")
-DATABASE_HOST = os.getenv("db_host")
-DATABASE_USER = os.getenv("db_usr")
-DATABASE_PASSWORD = os.getenv("db_pwd")
+load_dotenv()
+
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+DATABASE_HOST = os.getenv("DATABASE_HOST")
+DATABASE_USER = os.getenv("DATABASE_USER")
+DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
